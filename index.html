@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valorant crosshair database</title>
+  <link href="bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="script.js"></script>
+</head>
+<body>
+
+<nav class="main-nav">
+  <div class="nav-container">
+    <h1 class="logo">VALORANT CRS</h1>
+    <ul class="nav-links">
+      <li><a href="#home-section">Homepage</a></li>
+      <li><a href="#introduction-section">Introduction</a></li>
+      <li><a href="#crosshair-list">Crosshair Database</a></li>
+      <li><a href="#form-section">About us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero" id="home-section">
+  <div class="hero-content">
+    <h1>Customize your exclusive crosshair</h1>
+    <p>Explore the most suitable crosshair configuration scheme for your shooting style</p>
+  </div>
+</section>
+
+<article class="carousel-container" id="carousel-section">
+  <h2>Recommended crosshair configuration</h2>
+  <div class="carousel">
+    <div class="slides">
+
+      <div class="slide active">
+        <div class="slide-bg" style="background-image: url('assets/aspaslogo.png')"></div>
+        <div class="slide-content">
+          <h3>Aspas' crosshair configuration</h3>
+        </div>
+        <div class="slide-video">
+          <video controls autoplay muted playsinline>
+            <source src="assets/aspas.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="slide-bg" style="background-image: url('assets/zmjjkklogo.png')"></div>
+        <div class="slide-content">
+          <h3>Zmjjjkk's crosshair configuration</h3>
+        </div>
+        <div class="slide-video">
+          <video controls autoplay muted playsinline>
+            <source src="assets/zmjjkk.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="slide-bg" style="background-image: url('assets/tenzlogo.png')"></div>
+        <div class="slide-content">
+          <h3>Tenz's crosshair configuration</h3>
+        </div>
+        <div class="slide-video">
+          <video controls autoplay muted playsinline>
+            <source src="assets/tenz.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="slide-bg" style="background-image: url('assets/somethinglogo.png')"></div>
+        <div class="slide-content">
+          <h3>Something's crosshair configuration</h3>
+        </div>
+        <div class="slide-video">
+          <video controls autoplay muted playsinline>
+            <source src="assets/something.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="slide-bg" style="background-image: url('assets/forsakenlogo.png')"></div>
+        <div class="slide-content">
+          <h3>Forsaken's crosshair configuration</h3>
+        </div>
+        <div class="slide-video">
+          <video controls autoplay muted playsinline>
+            <source src="assets/forsaken.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn prev">&#10094;</button>
+    <button class="carousel-btn next">&#10095;</button>
+    <div class="indicators"></div>
+  </div>
+</article>
+
+<section class="introduction-section" id="introduction-section">
+  <div class="container mt-5">
+    <div class="card bg-dark text-white mb-4" v-if="gameInfo">
+      <div class="card-body">
+        <h2 class="card-title">{{ gameInfo.title }}</h2>
+        <p class="card-text">{{ gameInfo.description }}</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-secondary text-white" v-for="(feature, index) in gameInfo.features" :key="index">
+            {{ feature }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="text-white mb-3">Featured Teams</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col" v-for="(team, index) in proTeams" :key="index">
+        <div class="card h-100 bg-dark text-white">
+          <div class="card-body">
+            <h5 class="card-title">{{ team.name }}</h5>
+            <p class="card-text">{{ team.description }}</p>
+            <div class="badge bg-danger me-2" v-for="(region, i) in team.regions" :key="i">{{ region }}</div>
+          </div>
+          <div class="card-footer bg-secondary">
+            <small class="text-white">Major Championships: {{ team.championships }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="crosshair-list" id="crosshair-list">
+  <div class="search-bar" id="search-bar">
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Search for player name or team name...">
+    </div>
+  </div>
+  <h2>Professional athlete's crosshair configuration</h2>
+  <div class="list-container" id="list-container"></div>
+</section>
+
+<section class="form-section" id="form-section">
+  <div class="container mt-5 mb-5" id="vue-root">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card bg-dark text-white">
+          <div class="card-header bg-danger text-white">
+            <h2 class="form-title mb-0">Problem feedback</h2>
+          </div>
+          <div class="card-body">
+            <form id="config-form" class="crosshair-form" @submit.prevent="onSubmit">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Contact Email:</label>
+                  <input type="email"
+                         class="form-control bg-secondary text-white border-0"
+                         id="email"
+                         name="email"
+                         placeholder="name@example.com"
+                         required
+                         pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                         v-model="email">
+                </div>
+                <div class="col-md-6">
+                  <label for="problem-code" class="form-label">Wrong crosshair code:</label>
+                  <input type="text"
+                         class="form-control bg-secondary text-white border-0"
+                         id="problem-code"
+                         name="problem-code"
+                         placeholder="Input incorrect crosshair code"
+                         required
+                         pattern="^([0-9a-zA-Z];?)+$"
+                         v-model="problemCode">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Problem description:</label>
+                <textarea class="form-control bg-secondary text-white border-0"
+                          id="description"
+                          name="description"
+                          rows="5"
+                          minlength="20"
+                          placeholder="Please provide a detailed description of the problem encountered (at least 20 words)"
+                          required
+                          v-model="description"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-danger w-100">Submit Feedback</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="main-footer">
+  <p>&copy; 2025 Valorant Crosshair Config. All Right Reserved</p>
+</footer>
+</body>
+
+<script src="vue.global.js"></script>
+<script>
+  Vue.createApp({
+    data() {
+      return {
+        email: '',
+        problemCode: '',
+        description: '',
+      };
+    },
+    methods: {
+      onSubmit() {
+        if (!this.email || !this.problemCode || !this.description) {
+          alert('❌ Please fill in all fields.');
+          return;
+        }
+
+        alert('✅ Feedback submitted successfully!');
+
+        this.email = '';
+        this.problemCode = '';
+        this.description = '';
+      }
+    }
+  }).mount('#vue-root');
+
+  Vue.createApp({
+    data() {
+      return {
+        gameInfo: {
+          title: "VALORANT",
+          description: "A tactical 5v5 character-based shooter where precise gunplay meets unique agent abilities.",
+          features: [
+            "Tactical FPS with unique agent abilities",
+            "128-tick servers for precise gameplay",
+            "Competitive ranking system",
+            "Regular game updates and events"
+          ]
+        },
+        proTeams: [
+          {
+            name: "Sentinels",
+            regions: ["North America"],
+            championships: 3,
+            description: "One of the most iconic NA teams known for aggressive playstyle"
+          },
+          {
+            name: "Fnatic",
+            regions: ["EMEA"],
+            championships: 2,
+            description: "Dominant EMEA roster with strategic team coordination"
+          },
+          {
+            name: "DRX",
+            regions: ["Korea", "Asia-Pacific"],
+            championships: 4,
+            description: "Korean powerhouse with exceptional tactical discipline"
+          }
+        ]
+      };
+    }
+  }).mount('#introduction-section');
+</script>
+</html>
